@@ -9,3 +9,6 @@ C:\Users\Administrator\Documents\CSharpProject\obj\Debug\netcoreapp3.1\CSharpPro
 C:\Users\Administrator\Documents\CSharpProject\obj\Debug\netcoreapp3.1\CSharpProject.AssemblyInfo.cs
 C:\Users\Administrator\Documents\CSharpProject\obj\Debug\netcoreapp3.1\CSharpProject.dll
 C:\Users\Administrator\Documents\CSharpProject\obj\Debug\netcoreapp3.1\CSharpProject.pdb
+C:\Users\Administrator\Documents\CSharpProject\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+C:\Users\Administrator\Documents\CSharpProject\obj\Debug\netcoreapp3.1\CSharpProject.csproj.CopyComplete
+C:\Users\Administrator\Documents\CSharpProject\bin\Debug\netcoreapp3.1\System.Windows.Forms.dll

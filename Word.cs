@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-//using System.Windows.Forms;
+using System.Windows.Forms;
 using System.Threading;
 using System.IO;
 using System.Runtime.Serialization.Json;
@@ -38,6 +38,31 @@ class Word{
             dataContract.WriteObject(fs, wordDic);
         }
         Console.WriteLine("save");
+    }
+}
+
+public class MainFrame : Form{
+    private const int FORM_HEIGHT = 200;
+    private const int FORM_LENGTH = 300;
+    private bool sysFlag, runFlag, WordFlag;
+    private Label wordLabel, meanLabel;
+    private Button preButton, stopButton, nextButton;
+
+    public MainFrame(){
+        wordLabel = new Label();
+        meanLabel = new Label();
+        preButton = new Button();
+        nextButton = new Button();
+        stopButton = new Button();
+        sysFlag = true;
+        runFlag = true;
+        initializeComponent();
+    }
+    private void initializeComponent(){
+        wordLabel.Text = "word";
+        wordLabel.Size = new Size(FORM_LENGTH-24, 40);
+        wordLabel.Location = new Point(10,10);
+        wordLabel.BackColor = Color.LightGreen;
     }
 }
 
