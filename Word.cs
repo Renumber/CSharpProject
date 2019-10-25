@@ -11,7 +11,96 @@ using System.IO;
 using System.Runtime.Serialization.Json;
 
 class Word{
+    public static WordDic wordDic;
     static void Main(string[] args){
-            Console.WriteLine("Hello World!");
+        if(File.Exists(@"WordDic.db")){
+            load();
+        }else{
+            wordDic = new WordDic();
+            wordDic.addDic("word", "mean");
+            wordDic.addDic("F1", "add word");
+            wordDic.addDic("R", "shuffle");
+            save();
+        }
+        wordDic.shuffle();
+    }
+    public static void load(){
+        DataContractJsonSerializer dataContract = new DataContractJsonSerializer(typeof(WordDic));
+        using(FileStream fs = new FileStream(@"WordDic.db", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None)){
+            wordDic = dataContract.ReadObject(fs) as WordDic;
+        }
+        Console.WriteLine("load");
+    }
+    public static void save(){
+        wordDic.shuffle();
+        DataContractJsonSerializer dataContract = new DataContractJsonSerializer(typeof(WordDic));
+        using(FileStream fs = new FileStream(@"WordDic.db", FileMode.Create, FileAccess.ReadWrite, FileShare.None)){
+            dataContract.WriteObject(fs, wordDic);
+        }
+        Console.WriteLine("save");
+    }
+}
+
+[Serializable]
+public class WordDic{
+    private Dictionary<string,string> dic;
+    private List<string> keys;
+    private int index;
+
+    public WordDic(){
+        dic = new Dictionary<string, string>();
+        index = 0;
+    }
+    public void addDic(string word, string mean){
+        if(dic.ContainsKey(word)){
+            Console.WriteLine("이미있");
+        }else{
+            dic.Add(word, mean);
+        }
+    }
+    public void shuffle(){
+        keys = new List<string>(dic.Keys);
+        Random rnd = new Random();
+        int n = keys.Count;
+        while((n--)>1){
+            int k = rnd.Next(n+1);
+            string temp = keys[k];
+            keys[k] = keys[n];
+            keys[n] = temp;
+        }
+    }
+    //before showall, do shuffle
+    public void showAll(){
+        foreach(string str in keys){
+            Console.WriteLine(str + "\t" + dic[str]);
+        }
+    }
+    public string getNext(){
+        index = (++index)%(keys.Count);
+        return keys[index];
+    }
+    public string getPre(){
+        index = (keys.Count + (--index)) % (keys.Count);
+        return keys[index];
+    }
+    public string getMean(string key){
+        return dic[key];
+    }
+    public List<string> getKey(){
+        return new List<string>(dic.Keys);
+    }
+    public void clear(){
+        dic.Clear();
+        index = 0;
+    }
+    public void removeDic(string key){
+        dic.Remove(key);
+    }
+    public bool isEmpty(){
+        if(dic.Count == 0){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
