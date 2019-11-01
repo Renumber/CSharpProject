@@ -181,6 +181,106 @@ public class MainFrame : Form{
         }
     }
 }
+public class SetFrame : Form{
+    private const int FORM_HEIGHT = 400;
+    private const int FORM_LENGTH = 400;
+    private ListBox wordBox, meanBox;
+    private TextBox keyInput, meanInput, tableInput;
+    private Button addButton, delButton, clearButton, saveButton;
+
+    public SetFrame(){
+        wordBox = new ListBox();
+        meanBox = new ListBox();
+        keyInput = new TextBox();
+        meanInput = new TextBox();
+        tableInput = new TextBox();
+        addButton = new Button();
+        delButton = new Button();
+        clearButton = new Button();
+        saveButton = new Button();
+        initializeComponent();
+    }
+    private void initializeComponent(){
+        int margin = 10;
+        int btnLength = (FORM_LENGTH / 3) - (margin * 2);
+        int btnHeight = 30;
+
+        wordBox.Size = new Size((FORM_LENGTH / 3) - margin, FORM_HEIGHT - btnHeight * 2 - margin * 2);
+        wordBox.Location = new Point(margin, margin);
+        wordBox.Font = new Font("Serif", 8);
+        wordBox.TabStop = false;
+
+        meanBox.Size = new Size((FORM_LENGTH / 3) - margin, FORM_HEIGHT - btnHeight * 2 - margin * 2);
+        meanBox.Location = new Point((FORM_LENGTH / 3) , margin);
+        meanBox.Font = new Font("Serif", 8);
+        meanBox.TabStop = false;
+        
+        keyInput.AutoSize = true;
+        keyInput.Size = new Size((FORM_LENGTH / 3) - margin, btnHeight);
+        keyInput.Location = new Point(margin, FORM_HEIGHT - (btnHeight * 2) - margin);
+        keyInput.Font = new Font("Serif", 8);
+
+        meanInput.AutoSize = true;
+        meanInput.Size = new Size((FORM_LENGTH / 3) - margin, btnHeight);
+        meanInput.Location = new Point(((FORM_LENGTH / 3)), FORM_HEIGHT - (btnHeight * 2) - margin);
+        meanInput.Font = new Font("Serif", 8);
+
+        addButton.Text = "추가";
+        addButton.Size = new Size(btnLength, btnHeight);
+        addButton.Location = new Point((FORM_LENGTH / 3 * 2), FORM_HEIGHT - (btnHeight * 2) - margin);
+        addButton.Font = new Font("Serif", 10, FontStyle.Bold);
+        addButton.TextAlign = ContentAlignment.MiddleCenter;
+//        addButton.Click += new EventHandler(this.btnClick);
+
+        delButton.Text = "제거";
+        delButton.Size = new Size(btnLength, btnHeight);
+        delButton.Location = new Point((FORM_LENGTH / 3 * 2), margin);
+        delButton.Font = new Font("Serif", 10, FontStyle.Bold);
+        delButton.TextAlign = ContentAlignment.MiddleCenter;
+//        delButton.Click += new EventHandler(this.btnClick);
+        delButton.TabStop = false;
+
+        clearButton.Text = "초기화";
+        clearButton.Size = new Size(btnLength, btnHeight);
+        clearButton.Location = new Point((FORM_LENGTH / 3 * 2), margin * 2 + (btnHeight));
+        clearButton.Font = new Font("Serif", 10, FontStyle.Bold);
+        clearButton.TextAlign = ContentAlignment.MiddleCenter;
+//        clearButton.Click += new EventHandler(this.btnClick);
+        clearButton.TabStop = false;
+
+        saveButton.Text = "저장";
+        saveButton.Size = new Size(btnLength, btnHeight);
+        saveButton.Location = new Point((FORM_LENGTH / 3 * 2), FORM_HEIGHT - (btnHeight * 3) - (margin * 2));
+        saveButton.Font = new Font("Serif", 10, FontStyle.Bold);
+        saveButton.TextAlign = ContentAlignment.MiddleCenter;
+//        saveButton.Click += new EventHandler(this.btnClick);
+        saveButton.TabStop = false;
+
+        tableInput.AutoSize = false;
+        tableInput.Size = new Size(FORM_HEIGHT - margin * 2, FORM_LENGTH - margin * 2);
+        tableInput.Location = new Point (FORM_LENGTH + margin, margin);
+        tableInput.Font = new Font("Serif", 8);
+        tableInput.TabStop = false;
+//        tableInput.KeyDown += new KeyEventHandler(this.keyDown);
+        tableInput.Multiline = true;
+
+        this.Controls.Add(wordBox);
+        this.Controls.Add(meanBox);
+        this.Controls.Add(keyInput);
+        this.Controls.Add(meanInput);
+        this.Controls.Add(addButton);
+        this.Controls.Add(delButton);
+        this.Controls.Add(clearButton);
+        this.Controls.Add(saveButton);
+        this.Controls.Add(tableInput);
+
+        this.Text = "여기 더블클릭";
+        this.Size = new Size(FORM_LENGTH, FORM_HEIGHT);
+        this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
+//        this.Closing += new CancelEventHandler(this.formClosing);
+
+    }
+}
 [Serializable]
 public class WordDic{
     private Dictionary<string,string> dic;
