@@ -67,6 +67,15 @@ public class MainFrame : Form{
         wordLabel.Font = new Font("Serif", 18, FontStyle.Bold);
         wordLabel.TextAlign = ContentAlignment.MiddleCenter;
 
+        meanLabel.Text = "mean";
+        meanLabel.Size = new Size(FORM_LENGTH-24, 40);
+        meanLabel.Location = new Point(10,60);
+        meanLabel.BackColor = Color.LightBlue;
+        meanLabel.Font = new Font("Serif", 18, FontStyle.Bold);
+        meanLabel.TextAlign = ContentAlignment.MiddleCenter;
+
+        this.Controls.Add(wordLabel);
+
         this.Size = new Size(FORM_LENGTH, FORM_HEIGHT);
         this.Opacity = 0.9;
         this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
