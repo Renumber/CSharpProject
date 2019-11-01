@@ -23,6 +23,7 @@ class Word{
             save();
         }
         wordDic.shuffle();
+        Application.Run(new MainFrame());
     }
     public static void load(){
         DataContractJsonSerializer dataContract = new DataContractJsonSerializer(typeof(WordDic));
@@ -63,6 +64,14 @@ public class MainFrame : Form{
         wordLabel.Size = new Size(FORM_LENGTH-24, 40);
         wordLabel.Location = new Point(10,10);
         wordLabel.BackColor = Color.LightGreen;
+        wordLabel.Font = new Font("Serif", 18, FontStyle.Bold);
+        wordLabel.TextAlign = ContentAlignment.MiddleCenter;
+
+        this.Size = new Size(FORM_LENGTH, FORM_HEIGHT);
+        this.Opacity = 0.9;
+        this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
+        this.StartPosition = FormStartPosition.CenterScreen;
+        this.TopMost = true;
     }
 }
 
