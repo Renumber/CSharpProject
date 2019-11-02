@@ -298,6 +298,10 @@ public class SetFrame : Form{
     }
     private void insertTable(){
         string input = tableInput.Text;
+        if(input.Substring(input.Length-1)== "\n"){
+            Console.WriteLine("줄 넘");
+            input = input.Substring(0, input.Length - 1);
+        }
         string[] pairs = input.Split('\n');
         foreach(string str in pairs){
             Console.WriteLine(str);
