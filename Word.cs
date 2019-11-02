@@ -130,6 +130,8 @@ public class MainFrame : Form{
         }else if(e.KeyCode == Keys.F1){
             runFlag = false;
             wordFlag = false;
+            SetFrame SetFrame = new SetFrame();
+            SetFrame.ShowDialog();
         }
     }
     private void btnClick(object sender, EventArgs e){
@@ -219,25 +221,27 @@ public class SetFrame : Form{
         keyInput.Size = new Size((FORM_LENGTH / 3) - margin, btnHeight);
         keyInput.Location = new Point(margin, FORM_HEIGHT - (btnHeight * 2) - margin);
         keyInput.Font = new Font("Serif", 8);
+        keyInput.ImeMode = ImeMode.Alpha;
 
         meanInput.AutoSize = true;
         meanInput.Size = new Size((FORM_LENGTH / 3) - margin, btnHeight);
         meanInput.Location = new Point(((FORM_LENGTH / 3)), FORM_HEIGHT - (btnHeight * 2) - margin);
         meanInput.Font = new Font("Serif", 8);
+        meanInput.ImeMode = ImeMode.Hangul;
 
         addButton.Text = "추가";
         addButton.Size = new Size(btnLength, btnHeight);
         addButton.Location = new Point((FORM_LENGTH / 3 * 2), FORM_HEIGHT - (btnHeight * 2) - margin);
         addButton.Font = new Font("Serif", 10, FontStyle.Bold);
         addButton.TextAlign = ContentAlignment.MiddleCenter;
-//        addButton.Click += new EventHandler(this.btnClick);
+        addButton.Click += new EventHandler(this.btnClick);
 
         delButton.Text = "제거";
         delButton.Size = new Size(btnLength, btnHeight);
         delButton.Location = new Point((FORM_LENGTH / 3 * 2), margin);
         delButton.Font = new Font("Serif", 10, FontStyle.Bold);
         delButton.TextAlign = ContentAlignment.MiddleCenter;
-//        delButton.Click += new EventHandler(this.btnClick);
+        delButton.Click += new EventHandler(this.btnClick);
         delButton.TabStop = false;
 
         clearButton.Text = "초기화";
@@ -245,7 +249,7 @@ public class SetFrame : Form{
         clearButton.Location = new Point((FORM_LENGTH / 3 * 2), margin * 2 + (btnHeight));
         clearButton.Font = new Font("Serif", 10, FontStyle.Bold);
         clearButton.TextAlign = ContentAlignment.MiddleCenter;
-//        clearButton.Click += new EventHandler(this.btnClick);
+        clearButton.Click += new EventHandler(this.btnClick);
         clearButton.TabStop = false;
 
         saveButton.Text = "저장";
@@ -253,7 +257,7 @@ public class SetFrame : Form{
         saveButton.Location = new Point((FORM_LENGTH / 3 * 2), FORM_HEIGHT - (btnHeight * 3) - (margin * 2));
         saveButton.Font = new Font("Serif", 10, FontStyle.Bold);
         saveButton.TextAlign = ContentAlignment.MiddleCenter;
-//        saveButton.Click += new EventHandler(this.btnClick);
+        saveButton.Click += new EventHandler(this.btnClick);
         saveButton.TabStop = false;
 
         tableInput.AutoSize = false;
@@ -261,7 +265,7 @@ public class SetFrame : Form{
         tableInput.Location = new Point (FORM_LENGTH + margin, margin);
         tableInput.Font = new Font("Serif", 8);
         tableInput.TabStop = false;
-//        tableInput.KeyDown += new KeyEventHandler(this.keyDown);
+        tableInput.KeyDown += new KeyEventHandler(this.keyDown);
         tableInput.Multiline = true;
 
         this.Controls.Add(wordBox);
@@ -277,8 +281,72 @@ public class SetFrame : Form{
         this.Text = "여기 더블클릭";
         this.Size = new Size(FORM_LENGTH, FORM_HEIGHT);
         this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
-//        this.Closing += new CancelEventHandler(this.formClosing);
+        this.Closing += new CancelEventHandler(this.formClosing);
+        this.KeyDown += new KeyEventHandler(this.keyDown);
 
+        linkToDic();
+
+    }
+    private void linkToDic(){
+        List<string> keys = Word.wordDic.getKey();
+        wordBox.Items.Clear();
+        meanBox.Items.Clear();
+        foreach(string str in keys){
+            wordBox.Items.Add(str);
+            meanBox.Items.Add(Word.wordDic.getMean(str));
+        }
+    }
+    private void insertTable(){
+        string input = tableInput.Text;
+        string[] pairs = input.Split('\n');
+        foreach(string str in pairs){
+            Console.WriteLine(str);
+            string[] pair = str.Split('\t');
+            Word.wordDic.addDic(pair[0], pair[1]);
+        }
+        tableInput.Text = "";
+    }
+    private void keyDown(object sender, KeyEventArgs e){
+        if(e.KeyCode == Keys.Insert){
+            Console.WriteLine("Insert");
+            insertTable();
+            linkToDic();
+        }else if(e.KeyCode == Keys.Escape){
+            this.Close();
+        }
+    }
+    private void btnClick(object sender, EventArgs e){
+        string btnText = ((Button)sender).Text;
+        switch(btnText){
+            case "추가":
+                string key, mean;
+                key = keyInput.Text;
+                mean = meanInput.Text;
+                Word.wordDic.addDic(key, mean);
+                keyInput.Text = "";
+                meanInput.Text = "";
+                break;
+            case "제거":
+                string str = "" + wordBox.SelectedItem;
+                Console.WriteLine(str);
+                Word.wordDic.removeDic(str);
+                break;
+            case "초기화":
+                Word.wordDic.clear();
+                break;
+            case "저장":
+                Word.save();
+                break;
+            default :
+                break;
+        }
+        linkToDic();
+    }
+    private void formClosing(object sender, CancelEventArgs e){
+        if(Word.wordDic.isEmpty()){
+            Word.wordDic.addDic("아...아무것도", "없었다!");
+        }
+        Word.wordDic.shuffle();
     }
 }
 [Serializable]
