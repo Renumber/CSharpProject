@@ -26,6 +26,7 @@ class Basic{
             rank = new Rank();
             save();
         }
+        bullets = new List<Bullet>();
         Application.Run(new MainForm());
     }
     public static void load(){
@@ -113,10 +114,10 @@ public class MainForm : Form{
         rnd = new Random();
         int x , y, r, angle, vel;
         Brush bulletBrush;
-        for(int i = 0; i < 10; i++){
-            x = 30;
-            y = 30;
-            r = rnd.Next(1, 31);
+        for(int i = 0; i < 200; i++){
+            x = Basic.FORM_LENGTH/2;
+            y = Basic.FORM_HEIGHT/2;
+            r = rnd.Next(10, 31);
             angle = rnd.Next(0, 360);
             vel = rnd.Next(3, 7);
             bulletBrush = new SolidBrush(Color.FromArgb(rnd.Next(0,256), rnd.Next(0,256), rnd.Next(0,256)));
@@ -126,14 +127,14 @@ public class MainForm : Form{
     }
     private void initializeComponent(){
         topLabel.Text = "Hello?";
-        topLabel.Size = new Size(Basic.FORM_LENGTH, Basic.FORM_HEIGHT);
+        topLabel.Size = new Size(Basic.FORM_LENGTH, Basic.TOP_HEIGHT);
         topLabel.Location = new Point(0,0);
         topLabel.BackColor = Color.LightGreen;
         topLabel.Font = new Font("Serif", 16, FontStyle.Bold);
         topLabel.TextAlign = ContentAlignment.MiddleCenter;
-//        topLabel.MouseDown += new MouseEventHandler(this.topDown);
-//        topLabel.MouseMove += new MouseEventHandler(this.topMove);
-//        topLabel.MouseUp += new MouseEventHandler(this.topUp);
+        topLabel.MouseDown += new MouseEventHandler(this.topDown);
+        topLabel.MouseMove += new MouseEventHandler(this.topMove);
+        topLabel.MouseUp += new MouseEventHandler(this.topUp);
 
         this.Controls.Add(topLabel);
 
@@ -143,6 +144,7 @@ public class MainForm : Form{
         this.FormBorderStyle = FormBorderStyle.None;
         this.KeyDown += new KeyEventHandler(this.keyDown);
         this.KeyUp += new KeyEventHandler(this.keyUp);
+        this.TopMost = true;
         this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         this.SetStyle(ControlStyles.UserPaint, true);
         this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
@@ -243,9 +245,9 @@ public class Bullet{
     public void update(){
         x += vector.x * vel;
         y += -(vector.y) * vel;
-        if(x < -r * 2 || x > Basic.FORM_LENGTH + r * 2){ //when bullet meet left or right side
+        if(x < 0 || x > Basic.FORM_LENGTH - (r * 2)){ //when bullet meet left or right side
             vector.turnX();
-        }if(y < -r * 2 || y > Basic.FORM_HEIGHT + r * 2){ //when bullet meet top or bottom side
+        }if(y < Basic.TOP_HEIGHT || y > Basic.FORM_HEIGHT - (r * 2)){ //when bullet meet top or bottom side
             vector.turnY();
         }
     } 
