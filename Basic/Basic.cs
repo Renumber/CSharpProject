@@ -1,3 +1,4 @@
+using System.Net;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,13 +12,13 @@ using System.Runtime.Serialization.Json;
 
 class Basic{
     public static int TOP_HEIGHT = 50;
-    public static int FORM_HEIGHT = 700 + TOP_HEIGHT;
-    public static int FORM_LENGTH = 700;
+    public static int FORM_HEIGHT = 500 + TOP_HEIGHT;
+    public static int FORM_LENGTH = 500;
     public static int INTERVAL_NUM = 10;
     private static string FILE_NAME = "Basic" + @"database.db";
         
     public static Rank rank;
-    public static List<Bullet> bullets;
+    public static List<CircleObject> CircleObjects;
     
     static void Main(string[] args){
         if(File.Exists(FILE_NAME)){
@@ -26,7 +27,7 @@ class Basic{
             rank = new Rank();
             save();
         }
-        bullets = new List<Bullet>();
+        CircleObjects = new List<CircleObject>();
         Application.Run(new MainForm());
     }
     public static void load(){
@@ -117,11 +118,11 @@ public class MainForm : Form{
         for(int i = 0; i < 200; i++){
             x = Basic.FORM_LENGTH/2;
             y = Basic.FORM_HEIGHT/2;
-            r = rnd.Next(10, 31);
+            r = rnd.Next(10, 29);
             angle = rnd.Next(0, 360);
             vel = rnd.Next(3, 7);
             bulletBrush = new SolidBrush(Color.FromArgb(rnd.Next(0,256), rnd.Next(0,256), rnd.Next(0,256)));
-            Basic.bullets.Add(new Bullet(x, y, r, angle, vel, bulletBrush));
+            Basic.CircleObjects.Add(new Bullet(x, y, r, angle, vel, bulletBrush));
         }
         initializeComponent();
     }
@@ -163,13 +164,13 @@ public class MainForm : Form{
         e.Graphics.FillRectangle(borderBrush, 0, 0, 2, Basic.FORM_HEIGHT);
         e.Graphics.FillRectangle(borderBrush, 0, Basic.FORM_HEIGHT - 2, Basic.FORM_LENGTH, 2);
         e.Graphics.FillRectangle(borderBrush, Basic.FORM_LENGTH - 2, 0, 2, Basic.FORM_HEIGHT);
-        foreach (Bullet bullet in Basic.bullets){
+        foreach (Bullet bullet in Basic.CircleObjects){
             e.Graphics.FillEllipse(bullet.brush, bullet.x, bullet.y, bullet.r * 2, bullet.r * 2);
         }
     }
     private void update(object sender, EventArgs e){
         if(gameFlag){
-            foreach (Bullet bullet in Basic.bullets){
+            foreach (Bullet bullet in Basic.CircleObjects){
                 bullet.update();
             }
         }
@@ -230,11 +231,11 @@ public class MainForm : Form{
         }
     }
 }
-public class Bullet{
+public class CircleObject{
     public float x, y, r, vel;
     public Brush brush;
     public Vector vector;
-    public Bullet(float x, float y, float r, float angle, float vel, Brush brush){
+    public CircleObject(float x, float y, float r, float angle, float vel, Brush brush){
         this.r = r;
         this.x = x - r;
         this.y = y;
@@ -242,9 +243,15 @@ public class Bullet{
         this.vel = vel;
         this.brush = brush;
     }
-    public void update(){
+    virtual public void update(){
         x += vector.x * vel;
         y += -(vector.y) * vel;
+    }
+}
+public class Bullet : CircleObject{
+    public Bullet(float x, float y, float r, float angle, float vel, Brush brush) : base(x, y, r, angle, vel, brush){}
+    public override void update(){
+        base.update();
         if(x < 0 || x > Basic.FORM_LENGTH - (r * 2)){ //when bullet meet left or right side
             vector.turnX();
         }if(y < Basic.TOP_HEIGHT || y > Basic.FORM_HEIGHT - (r * 2)){ //when bullet meet top or bottom side
@@ -261,6 +268,12 @@ public class Bullet{
         return false;
     }
     */
+}
+public class User : CircleObject{
+    public User(float x, float y, float r, float vel, Brush brush) : base(x, y, r, 0, vel, brush){}
+    public override void update(){
+        //todo
+    }
 }
 public class Vector{
     public float x, y, anglePI;
